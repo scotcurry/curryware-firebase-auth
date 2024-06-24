@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Black">
+    <option name="sdkName" value="Python 3.11 (pythonProject)" />
+  </component>
+  <component name="ManuallyLinkedServices">
+    <option name="autoLinkedServices">
+      <set>
+        <option value="chuckjoke-frontend" />
+        <option value="curryware-front-end" />
+        <option value="curryware-java" />
+        <option value="dynamicinstrumentation" />
+        <option value="requests" />
+        <option value="rssfeedpuller" />
+        <option value="sqlserverapi" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11" project-jdk-type="Python SDK" />
+</project>
