@@ -1,0 +1,27 @@
+schema-version: v2.2
+dd-service: curryware-firebase-auth
+team: curryware-team
+application: curryware-ff
+tier: "1"
+type: web
+lifecycle: "production"
+languages:
+  - python
+contacts:
+  - type: slack
+    contact: https://currywareinc.slack.com/archives/C079FKPL160
+  - type: email
+    contact: scurry@curryware.org
+links:
+  - name: Runbook
+    type: runbook
+    url: http://runbook/shopping-cart
+  - name: Source
+    type: repo
+    provider: github
+    url: https://github.com/scotcurry/curryware-firebase-auth
+  - name: Documentation
+    type: doc
+    url: https://github.com/scotcurry/front-end/blob/master/README.md
+ci-pipeline-fingerprints:
+  - QWRB3hsXRb0
