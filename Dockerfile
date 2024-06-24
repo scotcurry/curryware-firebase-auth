@@ -11,5 +11,4 @@ COPY . .
 RUN useradd appuser && chown -R appuser /app
 USER appuser
 
-ENV DD_LOGS_INJECTION=true
-CMD exec ddtrace-run gunicorn -b :8002 --workers 1 --threads 8 --timeout 0 app:app
+CMD exec gunicorn -b :8002 --workers 1 --threads 8 --timeout 0 app:app
