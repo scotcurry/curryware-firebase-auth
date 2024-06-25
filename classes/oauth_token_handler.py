@@ -1,14 +1,40 @@
+import os
+import sys
 import time
+import logging
 import requests
 from classes import authorization_handler
+
+logger = logging.getLogger(__name__)
+stream_handler = logging.StreamHandler(sys.stdout)
+LOGLEVEL = os.environ.get('LOGLEVEL', 'INFO').upper()
+logger.setLevel(LOGLEVEL)
+logger.addHandler(stream_handler)
 
 
 def get_oauth_info_from_firebase():
     oauth_settings_path = 'oauth_info/'
 
-    database_reference = authorization_handler.get_database_reference()
-    oauth_path_reference = database_reference.child(oauth_settings_path)
-    oauth_token = oauth_path_reference.get()
+    try:
+        database_reference = authorization_handler.get_database_reference()
+        database_reference_path = database_reference.path
+        logger.info(f'Database reference: {database_reference_path}')
+    except Exception as exception:
+        logger.error(exception)
+
+    try:
+        oauth_path_reference = database_reference.child(oauth_settings_path)
+        logger.info(f'OAuth path reference: {oauth_path_reference.path}')
+    except Exception as exception:
+        logger.error(exception)
+
+    try:
+        oauth_token = oauth_path_reference.get()
+    except Exception as exception:
+        logger.error(exception)
+
+    last_token_update = oauth_token['last_token_update']
+    logger.info(f'Last Token Update: {last_token_update}')
 
     return oauth_token
 
@@ -16,12 +42,16 @@ def get_oauth_info_from_firebase():
 def check_if_auth_token_is_valid(oauth_token):
     current_unix_timestamp = int(time.time())
     valid_token_time = current_unix_timestamp + 3599
-    last_token_update = oauth_token.last_token_update
+    last_token_update = oauth_token['last_token_update']
     if last_token_update < valid_token_time:
+        logger.info(f'Last Token Update - Token still valid')
         return True
+
+    logger.info(f'Last Token Update - New Token Required')
 
 
 def get_new_oauth_token_from_refresh_token(oauth_token):
+    logger.info(f'Getting New OAuth Token from Refresh Token')
     request_data = {'client_id': oauth_token['clientID'],
                     'client_secret': oauth_token['clientSecret'],
                     'redirect_uri': oauth_token['redirect_url'],
@@ -34,10 +64,13 @@ def get_new_oauth_token_from_refresh_token(oauth_token):
         refresh_token_json = refresh_token.json()
         new_oauth_token = refresh_token_json['access_token']
         new_refresh_token = refresh_token_json['refresh_token']
+        update_new_token_info(new_oauth_token, new_refresh_token)
+        logger.info(f'Successfully got new OAuth token')
         return new_oauth_token, new_refresh_token
 
 
 def update_new_token_info(new_oauth_token, new_refresh_token):
+    logger.info(f'Updating Token Information')
     database_reference = authorization_handler.get_database_reference()
     oauth_node = database_reference.child('oauth_info')
     current_unix_timestamp = int(time.time())
