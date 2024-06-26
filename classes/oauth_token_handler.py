@@ -7,8 +7,8 @@ from classes import authorization_handler
 
 logger = logging.getLogger(__name__)
 stream_handler = logging.StreamHandler(sys.stdout)
-LOGLEVEL = os.environ.get('LOGLEVEL', 'INFO').upper()
-logger.setLevel(LOGLEVEL)
+LOGLEVEL = os.environ.get('LOGLEVEL', 'DEBUG').upper()
+logger.setLevel(level=LOGLEVEL)
 logger.addHandler(stream_handler)
 
 
@@ -29,9 +29,18 @@ def get_oauth_info_from_firebase():
         logger.error(exception)
 
     try:
+        logger.info('Getting oauth info from firebase')
         oauth_token = oauth_path_reference.get()
+        auth_token = oauth_token['auth_token']
+        refresh_token = oauth_token['refresh_token']
+        last_update_time = oauth_token['last_token_update']
+        auth_token_stub = auth_token[0:5]
+        refresh_token_stub = refresh_token[0:5]
+        logger.debug(f'OAuth token: {auth_token_stub}')
+        logger.debug(f'Refresh token: {refresh_token_stub}')
+        logger.debug(f'Last update time: {last_update_time}')
     except Exception as exception:
-        logger.error(exception)
+        logger.error(exception.args[0])
 
     last_token_update = oauth_token['last_token_update']
     logger.info(f'Last Token Update: {last_token_update}')

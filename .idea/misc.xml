@@ -6,13 +6,7 @@
   <component name="ManuallyLinkedServices">
     <option name="autoLinkedServices">
       <set>
-        <option value="chuckjoke-frontend" />
-        <option value="curryware-front-end" />
-        <option value="curryware-java" />
-        <option value="dynamicinstrumentation" />
-        <option value="requests" />
-        <option value="rssfeedpuller" />
-        <option value="sqlserverapi" />
+        <option value="curryware-firebase-auth" />
       </set>
     </option>
   </component>
