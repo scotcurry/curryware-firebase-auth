@@ -52,13 +52,16 @@ def check_if_auth_token_is_valid(oauth_token):
     # Get the current time and add an hour.  If the last update was in the past hour, i.e.
     # the auth_token i
     current_unix_timestamp = int(time.time())
-    valid_token_time = current_unix_timestamp + 3599
     last_token_update = oauth_token['last_token_update']
-    if last_token_update > valid_token_time:
+    valid_token_time = last_token_update + 3599
+    if current_unix_timestamp > valid_token_time:
         logger.info(f'Last Token Update - Token still valid')
-        return True
+        logger.info(f'Current Time: {current_unix_timestamp}, Valid Token Time: '
+                    f'{valid_token_time}')
+        return False
 
     logger.info(f'Last Token Update - New Token Required')
+    return True
 
 
 def get_new_oauth_token_from_refresh_token(oauth_token):
