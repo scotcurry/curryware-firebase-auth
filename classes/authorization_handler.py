@@ -1,14 +1,12 @@
 import json
-import os
+import base64
 import logging
-import sys
 
 from classes.settings_handler import get_settings
 
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
-
 
 FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
           '[dd.service=%(dd.service)s dd.env=%(dd.env)s '
@@ -32,10 +30,13 @@ def get_database_reference():
         logger.error('Firebase sdk info not set')
         raise ValueError('Firebase credentials not available')
 
-    firebase_admin_sdk_json = json.loads(firebase_admin_sdk_info)
+    firebase_admin_sdk_info_decrypted = base64.b64decode(firebase_admin_sdk_info)
+    firebase_admin_sdk_json = json.loads(firebase_admin_sdk_info_decrypted)
     creds = credentials.Certificate(firebase_admin_sdk_json)
 
-    options_dict = { 'databaseURL': firebase_database_name }
+    firebase_database_decrypted = base64.b64decode(firebase_database_name)
+
+    options_dict = {'databaseURL': firebase_database_decrypted}
     try:
         firebase_admin.initialize_app(creds, options_dict)
     except ValueError as error:
