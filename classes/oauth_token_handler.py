@@ -23,14 +23,15 @@ def get_oauth_info_from_firebase():
         database_reference = authorization_handler.get_database_reference()
         database_reference_path = database_reference.path
         logger.info(f'Database reference: {database_reference_path}')
-    except Exception as exception:
-        logger.error(exception)
+    except ValueError as exception:
+        logger.error("Error retrieving oauth info from firebase")
+        logger.error(exception.args[0])
 
     try:
         oauth_path_reference = database_reference.child(oauth_settings_path)
         logger.info(f'OAuth path reference: {oauth_path_reference.path}')
-    except Exception as exception:
-        logger.error(exception)
+    except ValueError as exception:
+        logger.error(exception.args[0])
 
     try:
         logger.info('Getting oauth info from firebase')
