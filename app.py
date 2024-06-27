@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 import logging
 from flask import Flask
 from classes.oauth_token_handler import (get_oauth_info_from_firebase,
@@ -18,7 +19,7 @@ logger.addHandler(stream_handler)
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
 def index_page():
-    return "currware-firebase-auth index page"
+    return "curryware-firebase-auth index page"
 
 
 @app.route('/get_oauth_token', methods=['GET'])
@@ -34,7 +35,9 @@ def get_oauth_token():
     if check_if_auth_token_is_valid(oauth_info):
         logger.info('Successfully fetched valid oauth info')
         oauth_token = oauth_info['auth_token']
-        return oauth_token
+        auth_token_dict = {'oauth_token': oauth_token}
+        auth_token_json = json.dumps(auth_token_dict)
+        return auth_token_json
 
     try:
         new_oauth_token, new_refresh_token = get_new_oauth_token_from_refresh_token(oauth_info)
