@@ -9,11 +9,15 @@ from classes.oauth_token_handler import (get_oauth_info_from_firebase,
 
 app = Flask(__name__)
 
-logger = logging.getLogger(__name__)
-stream_handler = logging.StreamHandler(sys.stdout)
-LOGLEVEL = os.environ.get('LOGLEVEL', 'INFO').upper()
-logger.setLevel(LOGLEVEL)
-logger.addHandler(stream_handler)
+FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
+          '[dd.service=%(dd.service)s dd.env=%(dd.env)s '
+          'dd.version=%(dd.version)s '
+          'dd.trace_id=%(dd.trace_id)s dd.span_id=%(dd.span_id)s] '
+          '- %(message)s')
+
+logging.basicConfig(format=FORMAT)
+logger = logging.getLogger('curryware-firebase-auth')
+logger.level = logging.DEBUG
 
 
 @app.route('/', methods=['GET'])

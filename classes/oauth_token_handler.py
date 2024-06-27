@@ -5,11 +5,15 @@ import logging
 import requests
 from classes import authorization_handler
 
-logger = logging.getLogger(__name__)
-stream_handler = logging.StreamHandler(sys.stdout)
-LOGLEVEL = os.environ.get('LOGLEVEL', 'DEBUG').upper()
-logger.setLevel(level=LOGLEVEL)
-logger.addHandler(stream_handler)
+FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
+          '[dd.service=%(dd.service)s dd.env=%(dd.env)s '
+          'dd.version=%(dd.version)s '
+          'dd.trace_id=%(dd.trace_id)s dd.span_id=%(dd.span_id)s] '
+          '- %(message)s')
+
+logging.basicConfig(format=FORMAT)
+logger = logging.getLogger('curryware-firebase-auth')
+logger.level = logging.DEBUG
 
 
 def get_oauth_info_from_firebase():
@@ -39,13 +43,9 @@ def get_oauth_info_from_firebase():
         logger.debug(f'OAuth token: {auth_token_stub}')
         logger.debug(f'Refresh token: {refresh_token_stub}')
         logger.debug(f'Last update time: {last_update_time}')
+        return oauth_token
     except Exception as exception:
         logger.error(exception.args[0])
-
-    last_token_update = oauth_token['last_token_update']
-    logger.info(f'Last Token Update: {last_token_update}')
-
-    return oauth_token
 
 
 def check_if_auth_token_is_valid(oauth_token):
