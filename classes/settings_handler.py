@@ -19,6 +19,8 @@ def get_settings():
         firebase_admin_sdk_info_base64 = os.environ.get('FIREBASE_ADMIN_SDK_JSON')
         firebase_admin_sdk_info_byte = base64.b64decode(firebase_admin_sdk_info_base64)
         firebase_admin_sdk_info = firebase_admin_sdk_info_byte.decode('utf-8')
+        firebase_admin_sdk_json_to_log = firebase_admin_sdk_info_byte.decode('utf-8')[0:5]
+        logger.info(firebase_admin_sdk_json_to_log)
     else:
         raise ValueError('FIREBASE_ADMIN_SDK_JSON environment variable not set')
 
@@ -27,6 +29,8 @@ def get_settings():
         firebase_database_name_base64 = os.environ.get('FIREBASE_DATABASE_NAME')
         firebase_database_name_byte = base64.b64decode(firebase_database_name_base64)
         firebase_database_name = firebase_database_name_byte.decode('utf-8')
+        firebase_database_name_to_log = firebase_database_name_byte.decode('utf-8')
+        logger.info(firebase_database_name_to_log)
     else:
         raise ValueError('FIREBASE_DATABASE_NAME environment variable not set')
 
