@@ -11,7 +11,7 @@ def get_settings():
               '- %(message)s')
 
     logging.basicConfig(format=FORMAT)
-    logger = logging.getLogger('curryware-firebase-auth')
+    logger = logging.getLogger('curryware-firebase-auth-settings-handler')
     logger.level = logging.DEBUG
 
     if 'FIREBASE_ADMIN_SDK_JSON' in os.environ:

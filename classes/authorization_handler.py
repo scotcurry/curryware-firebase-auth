@@ -14,7 +14,7 @@ FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
           '- %(message)s')
 
 logging.basicConfig(format=FORMAT)
-logger = logging.getLogger('curryware-firebase-auth')
+logger = logging.getLogger('curryware-firebase-auth-auth-handler')
 logger.level = logging.DEBUG
 
 
@@ -32,7 +32,7 @@ def get_database_reference():
         logger.error('Firebase sdk info not set')
         raise ValueError('Firebase credentials not available')
     else:
-        firebase_admin_sdk_info_log = firebase_admin_sdk_info
+        firebase_admin_sdk_info_log = firebase_admin_sdk_info[0:10]
         logger.info('authorization_handler - {}'.format(firebase_admin_sdk_info_log))
 
     try:

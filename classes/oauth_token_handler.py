@@ -12,7 +12,7 @@ FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
           '- %(message)s')
 
 logging.basicConfig(format=FORMAT)
-logger = logging.getLogger('curryware-firebase-auth')
+logger = logging.getLogger('curryware-firebase-auth-oauth-token-handler')
 logger.level = logging.DEBUG
 
 
