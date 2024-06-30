@@ -9,7 +9,10 @@ class TestSettingsHandler(TestCase):
 
     def test_get_settings(self):
         firebase_admin_sdk_info, firebase_database_name = get_settings()
-        assert (firebase_admin_sdk_info is not None) and (firebase_database_name is not None)
+        first_sdk_info_character = firebase_admin_sdk_info[0:1]
+        firebase_database_protocol = firebase_database_name[0:4]
+        assert ((first_sdk_info_character == '{') and
+                (firebase_database_protocol == 'http'))
 
     def test_get_authorization_token(self):
         auth_token = get_database_reference()

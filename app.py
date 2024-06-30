@@ -33,8 +33,9 @@ def get_oauth_token():
         oauth_info = get_oauth_info_from_firebase()
         logger.info('Successfully fetched oauth info')
     except ValueError as exception:
+        logger.error('Error fetching oauth info')
         logger.error(exception.args[0])
-        return exception.args[0]
+        return 'Failed to fetch oauth info', 500
 
     if check_if_auth_token_is_valid(oauth_info):
         logger.info('Successfully fetched valid oauth info')

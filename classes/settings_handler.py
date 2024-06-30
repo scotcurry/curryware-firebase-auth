@@ -15,19 +15,19 @@ def get_settings():
     logger.level = logging.DEBUG
 
     if 'FIREBASE_ADMIN_SDK_JSON' in os.environ:
-        logger.error('FIREBASE_ADMIN_SDK_JSON environment variable not set')
         firebase_admin_sdk_info= os.environ.get('FIREBASE_ADMIN_SDK_JSON')
         firebase_admin_sdk_info_to_log = firebase_admin_sdk_info[0:10] + '...'
         logger.info(firebase_admin_sdk_info_to_log)
     else:
+        logger.error('FIREBASE_ADMIN_SDK_JSON is not set')
         raise ValueError('FIREBASE_ADMIN_SDK_JSON environment variable not set')
 
     if 'FIREBASE_DATABASE_NAME' in os.environ:
-        logger.error('FIREBASE_DATABASE_NAME environment variable not set')
         firebase_database_name = os.environ.get('FIREBASE_DATABASE_NAME')
         firebase_database_name_to_log = firebase_database_name[0:10] + '...'
         logger.info(firebase_database_name_to_log)
     else:
+        logger.error('FIREBASE_DATABASE_NAME is not set')
         raise ValueError('FIREBASE_DATABASE_NAME environment variable not set')
 
     return firebase_admin_sdk_info, firebase_database_name
