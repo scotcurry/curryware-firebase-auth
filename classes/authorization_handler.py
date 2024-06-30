@@ -32,11 +32,13 @@ def get_database_reference():
         logger.error('Firebase sdk info not set')
         raise ValueError('Firebase credentials not available')
     else:
-        firebase_admin_sdk_info_log = firebase_admin_sdk_info[0:5]
+        firebase_admin_sdk_info_log = firebase_admin_sdk_info
         logger.info('authorization_handler - {}'.format(firebase_admin_sdk_info_log))
 
     try:
-        firebase_admin_sdk_json = json.loads(firebase_admin_sdk_info)
+        # Because the certificate has new line characters in it, it will throw an error
+        # we need to set the strict flag to overcome this.
+        firebase_admin_sdk_json = json.loads(firebase_admin_sdk_info, strict=False)
         creds = credentials.Certificate(firebase_admin_sdk_json)
     except ValueError as error:
         logger.error('Error parsing Firebase credentials: {}'.format(error.args[0]))
