@@ -1,5 +1,4 @@
 import json
-import base64
 import logging
 
 from classes.settings_handler import get_settings
@@ -25,19 +24,28 @@ def get_database_reference():
     if firebase_database_name is None:
         logger.error('Firebase database name not set')
         raise ValueError('Firebase database name not available')
+    else:
+        logger.info('authorization_handler - '
+                    'DB Name: {}'.format(firebase_database_name))
 
     if firebase_admin_sdk_info is None:
         logger.error('Firebase sdk info not set')
         raise ValueError('Firebase credentials not available')
+    else:
+        firebase_admin_sdk_info_log = firebase_admin_sdk_info[0:5]
+        logger.info('authorization_handler - {}'.format(firebase_admin_sdk_info_log))
 
-    firebase_admin_sdk_json = json.loads(firebase_admin_sdk_info)
-    creds = credentials.Certificate(firebase_admin_sdk_json)
+    try:
+        firebase_admin_sdk_json = json.loads(firebase_admin_sdk_info)
+        creds = credentials.Certificate(firebase_admin_sdk_json)
+    except ValueError as error:
+        logger.error('Error parsing Firebase credentials: {}'.format(error.args[0]))
 
     options_dict = {'databaseURL': firebase_database_name}
     try:
         firebase_admin.initialize_app(creds, options_dict)
     except ValueError as error:
-        logger.warning(error.args[0])
+        logger.error('Error initializing Firebase app')
 
     database_reference = db.reference('db_root/')
     return database_reference
