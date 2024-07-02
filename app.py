@@ -1,5 +1,3 @@
-import os
-import sys
 import json
 import logging
 from flask import Flask
@@ -16,7 +14,7 @@ FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
           '- %(message)s')
 
 logging.basicConfig(format=FORMAT)
-logger = logging.getLogger('curryware-firebase-auth')
+logger = logging.getLogger('curryware-firebase-auth - app - ')
 logger.level = logging.DEBUG
 
 
@@ -45,9 +43,11 @@ def get_oauth_token():
         return auth_token_json
 
     try:
-        new_oauth_token, new_refresh_token = get_new_oauth_token_from_refresh_token(oauth_info)
+        new_oauth_token, new_refresh_token = (
+            get_new_oauth_token_from_refresh_token(oauth_info))
         logger.info('Successfully fetched new oauth info')
+        auth_token_json = {'oauth_token': new_oauth_token}
     except ValueError as exception:
         logger.error(exception.args[0])
 
-    return new_oauth_token
+    return auth_token_json

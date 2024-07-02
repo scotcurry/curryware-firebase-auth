@@ -52,6 +52,7 @@ def get_oauth_info_from_firebase():
 def check_if_auth_token_is_valid(oauth_token):
     # Get the current time and add an hour.  If the last update was in the past hour, i.e.
     # the auth_token i
+    logger.info('Checking if auth token is valid')
     current_unix_timestamp = int(time.time())
     last_token_update = oauth_token['last_token_update']
     valid_token_time = last_token_update + 3599
