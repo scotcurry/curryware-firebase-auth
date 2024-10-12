@@ -3,12 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="Python 3.11 (pythonProject)" />
   </component>
-  <component name="ManuallyLinkedServices">
-    <option name="autoLinkedServices">
-      <set>
-        <option value="curryware-firebase-auth" />
-      </set>
-    </option>
-  </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11" project-jdk-type="Python SDK" />
 </project>
