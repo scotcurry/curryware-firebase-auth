@@ -3,7 +3,9 @@ import sys
 import time
 import logging
 import requests
+
 from classes import authorization_handler
+from classes.authorization_handler import get_database_reference
 
 FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
           '[dd.service=%(dd.service)s dd.env=%(dd.env)s '
@@ -17,6 +19,7 @@ logger.level = logging.DEBUG
 
 
 def get_oauth_info_from_firebase():
+
     oauth_settings_path = 'oauth_info/'
 
     try:

@@ -1,14 +1,18 @@
 import os
-import base64
 import logging
 
 
 def get_settings():
-    FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
-              '[dd.service=%(dd.service)s dd.env=%(dd.env)s '
-              'dd.version=%(dd.version)s '
-              'dd.trace_id=%(dd.trace_id)s dd.span_id=%(dd.span_id)s] '
-              '- %(message)s')
+
+    if 'RUNNING_IN_FUNCTION' not in os.environ:
+        FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
+                  '- %(message)s')
+    else:
+        FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
+                  '[dd.service=%(dd.service)s dd.env=%(dd.env)s '
+                  'dd.version=%(dd.version)s '
+                  'dd.trace_id=%(dd.trace_id)s dd.span_id=%(dd.span_id)s] '
+                  '- %(message)s')
 
     logging.basicConfig(format=FORMAT)
     logger = logging.getLogger('curryware-firebase-auth-settings-handler')
