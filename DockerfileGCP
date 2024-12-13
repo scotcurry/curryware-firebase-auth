@@ -1,0 +1,25 @@
+FROM python:3.11.8-slim-bookworm
+
+EXPOSE 8002
+
+WORKDIR /app
+COPY --from=gcr.io/datadoghq/serverless-init:latest /datadog-init /app/datadog-init
+RUN pip install --target /dd_tracer/python/ ddtrace
+COPY ../requirements.txt requirements.txt
+# See Datadog Static Analysis -- https://docs.datadoghq.com/code_analysis/static_analysis_rules/docker-best-practices/pip-pin-versions/
+RUN python3 -m pip install --upgrade pip==24.2 && python3 -m pip install --no-cache-dir -r requirements.txt
+COPY . .
+# ENV RUNNING_IN_FUNCTION=true
+ENV DD_SERVICE=curryware-firebase-auth-gcp
+ENV DD_ENV=prod
+ENV DD_VERSION=27
+
+RUN useradd appuser && chown -R appuser /app
+USER appuser
+
+# ENTRYPOINT ["/app/datadog-init"]
+CMD ["/app/datadog-init", "/dd_tracer/python/bin/ddtrace-run", "gunicorn", "-b :8002", "--workers=1", "--threads=8", "--timeout=0", "app:app"]
+
+# Build with docker buildx build --platform linux/amd64 -f DockerfileGCP -t us-central1-docker.pkg.dev/currywareff/currywareffrepository/curryware-firebase-auth-gcp:latest .
+# gcloud auth login
+# docker push us-central1-docker.pkg.dev/currywareff/currywareffrepository/curryware-firebase-auth-gcp:latest

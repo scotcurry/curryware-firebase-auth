@@ -7,11 +7,15 @@ import requests
 from classes import authorization_handler
 from classes.authorization_handler import get_database_reference
 
+#if 'RUNNING_IN_FUNCTION' not in os.environ:
 FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
-          '[dd.service=%(dd.service)s dd.env=%(dd.env)s '
-          'dd.version=%(dd.version)s '
-          'dd.trace_id=%(dd.trace_id)s dd.span_id=%(dd.span_id)s] '
           '- %(message)s')
+# else:
+#     FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
+#               '[dd.service=%(dd.service)s dd.env=%(dd.env)s '
+#               'dd.version=%(dd.version)s '
+#               'dd.trace_id=%(dd.trace_id)s dd.span_id=%(dd.span_id)s] '
+#               '- %(message)s')
 
 logging.basicConfig(format=FORMAT)
 logger = logging.getLogger('curryware-firebase-auth-oauth-token-handler')
@@ -29,12 +33,14 @@ def get_oauth_info_from_firebase():
     except ValueError as exception:
         logger.error("Error retrieving oauth info from firebase")
         logger.error(exception.args[0])
+        return 'Error'
 
     try:
         oauth_path_reference = database_reference.child(oauth_settings_path)
         logger.info(f'OAuth path reference: {oauth_path_reference.path}')
     except ValueError as exception:
         logger.error(exception.args[0])
+        return 'Error'
 
     try:
         logger.info('Getting oauth info from firebase')
@@ -50,6 +56,7 @@ def get_oauth_info_from_firebase():
         return oauth_token
     except Exception as exception:
         logger.error(exception.args[0])
+        return 'Error'
 
 
 def check_if_auth_token_is_valid(oauth_token):
