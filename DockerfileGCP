@@ -12,7 +12,7 @@ COPY . .
 # ENV RUNNING_IN_FUNCTION=true
 ENV DD_SERVICE=curryware-firebase-auth-gcp
 ENV DD_ENV=prod
-ENV DD_VERSION=27
+ENV DD_VERSION=29
 
 RUN useradd appuser && chown -R appuser /app
 USER appuser
