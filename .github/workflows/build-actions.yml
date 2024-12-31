@@ -59,28 +59,3 @@ jobs:
             tags.datadoghq.com/env=prod
             tags.datadoghq.com/version=${{ github.run_number }}
             tags.datadoghq.com/service=curryware-firebase-auth
-
-      # Check out the K8s manifest files for updating
-      - name: Get manifest files
-        uses: actions/checkout@v4
-        with:
-          repository: 'scotcurry/k8s-manifests'
-          path: '${{ github.workspace }}/k8s-manifests'
-          token: ${{ secrets.GH_ACCESS_TOKEN }}
-          ref: 'main'
-      - run: |
-          echo ${{ github.workspace }}
-          cd ${{ github.workspace }}/k8s-manifests
-          ls -la
-          # sed pattern to update manifest versions - 's/version: \"[[:digit:]]*\"/version: \"20\"/g'
-          # Site to test sed commands - https://sed.js.org/
-          echo 'Setting Version: ${{ github.run_number }}'
-          sed -i -e 's/version: \"[[:digit:]]*\"/version: \"${{ github.run_number }}\"/g' ${{ github.workspace }}/k8s-manifests/curryware-fantasy/curryware-firebase-auth-deployment.yaml
-          echo 'Updating image version'
-          sed -i -e 's/scotcurry4\/curryware-firebase-auth:[[:digit:]]*/scotcurry4\/curryware-firebase-auth:${{ github.run_number }}/g' ${{ github.workspace }}/k8s-manifests/curryware-fantasy/curryware-firebase-auth-deployment.yaml
-          cat ${{ github.workspace }}/k8s-manifests/curryware-fantasy/curryware-firebase-auth-deployment.yaml
-          echo "Committed curryware-firebase-auth $(date +"%Y-%m-%d %T") - Short SHA: ${{ github.sha }}" > commit_file.txt
-          git config user.name "scotcurry"
-          git config user.email "scotcurry4@gmail.com"
-          git commit -F commit_file.txt .
-          git push
