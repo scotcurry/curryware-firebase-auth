@@ -1,4 +1,3 @@
-import os
 import json
 import logging
 from flask import Flask, request
@@ -51,7 +50,8 @@ def get_oauth_token():
     if check_if_auth_token_is_valid(oauth_info):
         logger.info('Successfully fetched valid oauth info')
         oauth_token = oauth_info['auth_token']
-        auth_token_dict = {'oauth_token': oauth_token}
+        last_token_update = oauth_info['last_token_update']
+        auth_token_dict = {'oauth_token': oauth_token, 'last_token_update': last_token_update}
         auth_token_json = json.dumps(auth_token_dict)
         return auth_token_json
 

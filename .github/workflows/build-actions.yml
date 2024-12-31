@@ -47,6 +47,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          file: {{defaultContext}}/DockerfileGCP
           # platforms: linux/amd64,linux/arm64/v8
           # driver: docker-container
           push: true
