@@ -1,3 +1,8 @@
+# Important Note:  This doesn't follow the "normal" Github Actions flow.  Use the steps below.
+# Build with docker buildx build --platform linux/amd64 -f DockerfileGCP -t us-central1-docker.pkg.dev/currywareff/currywareffrepository/curryware-firebase-auth-gcp:latest .
+# gcloud auth login
+# docker push us-central1-docker.pkg.dev/currywareff/currywareffrepository/curryware-firebase-auth-gcp:latest
+
 name: curryware-firebase-auth Build
 on: [push]
 jobs:
@@ -29,7 +34,7 @@ jobs:
         with:
           dd_api_key: ${{ secrets.DD_API_KEY }}
           dd_app_key: ${{ secrets.DD_APP_KEY }}
-          dd_env: ci
+          dd_env: prod
           dd_service: curryware-firebase-auth
           dd_site: datadoghq.com
 

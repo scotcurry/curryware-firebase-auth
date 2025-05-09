@@ -1,3 +1,4 @@
+schema-version: v1
 rulesets:
   - python-best-practices
   - python-code-style
@@ -8,4 +9,4 @@ rulesets:
   - python-pandas
   - python-security
   - docker-best-practices
-schema-version: v1
+  - github-actions

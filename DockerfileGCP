@@ -1,3 +1,7 @@
+# Build with docker buildx build --platform linux/amd64 -f DockerfileGCP -t us-central1-docker.pkg.dev/currywareff/currywareffrepository/curryware-firebase-auth-gcp:latest .
+# gcloud auth login
+# docker push us-central1-docker.pkg.dev/currywareff/currywareffrepository/curryware-firebase-auth-gcp:latest
+
 FROM python:3.11.8-slim-bookworm
 
 EXPOSE 8002
@@ -19,7 +23,3 @@ USER appuser
 
 # ENTRYPOINT ["/app/datadog-init"]
 CMD ["/app/datadog-init", "/dd_tracer/python/bin/ddtrace-run", "gunicorn", "-b :8002", "--workers=1", "--threads=8", "--timeout=0", "app:app"]
-
-# Build with docker buildx build --platform linux/amd64 -f DockerfileGCP -t us-central1-docker.pkg.dev/currywareff/currywareffrepository/curryware-firebase-auth-gcp:latest .
-# gcloud auth login
-# docker push us-central1-docker.pkg.dev/currywareff/currywareffrepository/curryware-firebase-auth-gcp:latest
