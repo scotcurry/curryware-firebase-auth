@@ -11,7 +11,7 @@ COPY --from=gcr.io/datadoghq/serverless-init:latest /datadog-init /app/datadog-i
 RUN pip install --target /dd_tracer/python/ ddtrace
 COPY ../requirements.txt requirements.txt
 # See Datadog Static Analysis -- https://docs.datadoghq.com/code_analysis/static_analysis_rules/docker-best-practices/pip-pin-versions/
-RUN python3 -m pip install --upgrade pip==24.3.1 && python3 -m pip install --no-cache-dir -r requirements.txt
+RUN python3 -m pip install --upgrade pip==25.1.1 && python3 -m pip install --no-cache-dir -r requirements.txt
 COPY . .
 # ENV RUNNING_IN_FUNCTION=true
 ENV DD_SERVICE=curryware-firebase-auth-gcp

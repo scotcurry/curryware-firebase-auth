@@ -66,14 +66,14 @@ def check_if_auth_token_is_valid(oauth_token):
     current_unix_timestamp = int(time.time())
     last_token_update = oauth_token['last_token_update']
     valid_token_time = last_token_update + 3599
-    if current_unix_timestamp > valid_token_time:
+    if current_unix_timestamp < valid_token_time:
         logger.info(f'Last Token Update - Token still valid')
         logger.info(f'Current Time: {current_unix_timestamp}, Valid Token Time: '
                     f'{valid_token_time}')
-        return False
+        return True
 
     logger.info(f'Last Token Update - New Token Required')
-    return True
+    return False
 
 
 def get_new_oauth_token_from_refresh_token(oauth_token):
@@ -85,7 +85,8 @@ def get_new_oauth_token_from_refresh_token(oauth_token):
                     'grant_type': 'refresh_token'}
 
     refresh_token_endpoint = oauth_token['authority'] + oauth_token['token_endpoint']
-    refresh_token = requests.post(refresh_token_endpoint, data=request_data, timeout=5)
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+    refresh_token = requests.post(refresh_token_endpoint, data=request_data, timeout=5, headers=headers)
     if refresh_token.status_code == 200:
         refresh_token_json = refresh_token.json()
         new_oauth_token = refresh_token_json['access_token']
@@ -93,6 +94,10 @@ def get_new_oauth_token_from_refresh_token(oauth_token):
         update_new_token_info(new_oauth_token, new_refresh_token)
         logger.info(f'Successfully got new OAuth token')
         return new_oauth_token, new_refresh_token
+    if refresh_token.status_code == 429:
+        logger.error(f'Too many requests, please try again later')
+        return "Error", "Error"
+    return None
 
 
 def update_new_token_info(new_oauth_token, new_refresh_token):
